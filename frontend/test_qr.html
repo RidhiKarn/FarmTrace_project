@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>QR Code Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        button {
+            padding: 15px 30px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            margin: 10px;
+        }
+        button:hover {
+            background: #5568d3;
+        }
+        #qrcode {
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            display: inline-block;
+        }
+        .info {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 QR Code Library Test</h1>
+        <p>Click the button below to test if QRCode.js is working</p>
+
+        <button onclick="testQR()">Generate Test QR Code</button>
+        <button onclick="clearQR()">Clear QR Code</button>
+
+        <div id="qrcode"></div>
+
+        <div class="info" id="status">
+            <strong>Status:</strong> Ready to test
+        </div>
+    </div>
+
+    <!-- QR Code Library -->
+    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+
+    <script>
+        function testQR() {
+            const statusDiv = document.getElementById('status');
+            const qrDiv = document.getElementById('qrcode');
+
+            try {
+                // Check if QRCode is available
+                if (typeof QRCode === 'undefined') {
+                    statusDiv.innerHTML = '<strong style="color: red;">❌ Error:</strong> QRCode library not loaded!';
+                    console.error('QRCode library is not available');
+                    return;
+                }
+
+                // Clear previous QR code
+                qrDiv.innerHTML = '';
+
+                // Test data
+                const testData = {
+                    batchID: 5001,
+                    produceType: 'tomato',
+                    farmLocation: 'Nashik, MH',
+                    farmerID: 'FRM-001',
+                    timestamp: new Date().toISOString(),
+                    url: 'http://localhost:8000/index_multilingual.html?batch=5001'
+                };
+
+                console.log('📦 Generating QR code with data:', testData);
+
+                // Generate QR code
+                new QRCode(qrDiv, {
+                    text: JSON.stringify(testData),
+                    width: 256,
+                    height: 256,
+                    colorDark: '#000000',
+                    colorLight: '#ffffff',
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+
+                statusDiv.innerHTML = '<strong style="color: green;">✅ Success!</strong> QR Code generated successfully!<br><small>Scan with your phone to see the batch data</small>';
+                console.log('✅ QR code generated successfully!');
+
+            } catch (error) {
+                statusDiv.innerHTML = '<strong style="color: red;">❌ Error:</strong> ' + error.message;
+                console.error('❌ Error generating QR code:', error);
+            }
+        }
+
+        function clearQR() {
+            document.getElementById('qrcode').innerHTML = '';
+            document.getElementById('status').innerHTML = '<strong>Status:</strong> Ready to test';
+        }
+
+        // Check library on load
+        window.addEventListener('load', () => {
+            const statusDiv = document.getElementById('status');
+            if (typeof QRCode !== 'undefined') {
+                statusDiv.innerHTML = '<strong style="color: green;">✅ QRCode library loaded successfully!</strong> Click button to generate QR code.';
+                console.log('✅ QRCode library is available');
+            } else {
+                statusDiv.innerHTML = '<strong style="color: red;">❌ QRCode library failed to load!</strong>';
+                console.error('❌ QRCode library not available');
+            }
+        });
+    </script>
+</body>
+</html>

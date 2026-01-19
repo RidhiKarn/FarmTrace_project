@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FarmTrace - Health Profile | स्वास्थ्य प्रोफ़ाइल</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, 'Noto Sans Devanagari';
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        body.hindi {
+            font-family: 'Noto Sans Devanagari', 'Segoe UI', sans-serif;
+        }
+
+        .profile-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 650px;
+            width: 100%;
+            padding: 3rem;
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo h1 {
+            color: #667eea;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .logo p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .language-toggle {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .lang-btn, .voice-btn {
+            padding: 0.5rem 1rem;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .lang-btn:hover, .voice-btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+
+        .section {
+            margin-bottom: 2rem;
+        }
+
+        .section h3 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 0.5rem;
+        }
+
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .checkbox-item:hover {
+            background: #e9ecef;
+            transform: translateX(3px);
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            margin-right: 0.5rem;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .checkbox-item label {
+            cursor: pointer;
+            flex: 1;
+            font-size: 0.95rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #2c3e50;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .input-with-mic {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .input-with-mic input, .input-with-mic textarea, .input-with-mic select {
+            flex: 1;
+            padding: 0.9rem 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            font-family: inherit;
+        }
+
+        .input-with-mic textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .input-with-mic input:focus, .input-with-mic textarea:focus, .input-with-mic select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .mic-btn {
+            padding: 0.9rem;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);
+        }
+
+        .mic-btn:hover {
+            background: #2980b9;
+            transform: scale(1.1);
+        }
+
+        .mic-btn:active {
+            background: #e74c3c;
+            transform: scale(0.95);
+        }
+
+        .save-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.4);
+            margin-top: 1rem;
+        }
+
+        .save-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(39, 174, 96, 0.5);
+        }
+
+        .skip-btn {
+            width: 100%;
+            padding: 1rem;
+            background: #95a5a6;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-top: 0.5rem;
+        }
+
+        .skip-btn:hover {
+            background: #7f8c8d;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #2196f3;
+        }
+
+        .info-box p {
+            color: #0d47a1;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .success-message {
+            background: #efe;
+            color: #3c3;
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-container">
+        <div class="language-toggle">
+            <button onclick="toggleLanguage()" class="lang-btn" id="lang-btn">🇬🇧 English</button>
+            <button onclick="speakWelcome()" class="voice-btn" title="Voice Guide">🔊</button>
+        </div>
+
+        <div class="logo">
+            <h1 id="app-title">🏥 Health Profile</h1>
+            <p id="app-subtitle">Help us recommend safer produce for you</p>
+        </div>
+
+        <div class="info-box">
+            <p id="info-text">
+                This information helps us analyze which produce is safest for your health conditions.
+                All data is confidential and used only for personalized recommendations.
+            </p>
+        </div>
+
+        <div class="success-message" id="success-message"></div>
+
+        <form id="health-form" onsubmit="handleSaveProfile(event)">
+            <!-- Health Conditions -->
+            <div class="section">
+                <h3 id="conditions-title">Health Conditions</h3>
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="diabetes" name="conditions" value="diabetes">
+                        <label for="diabetes" id="label-diabetes">Diabetes (मधुमेह)</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="hypertension" name="conditions" value="hypertension">
+                        <label for="hypertension" id="label-hypertension">High BP (उच्च रक्तचाप)</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="heart" name="conditions" value="heart_disease">
+                        <label for="heart" id="label-heart">Heart Disease (हृदय रोग)</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="kidney" name="conditions" value="kidney_disease">
+                        <label for="kidney" id="label-kidney">Kidney Disease (गुर्दे की बीमारी)</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="liver" name="conditions" value="liver_disease">
+                        <label for="liver" id="label-liver">Liver Disease (जिगर की बीमारी)</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="asthma" name="conditions" value="asthma">
+                        <label for="asthma" id="label-asthma">Asthma (दमा)</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="thyroid" name="conditions" value="thyroid">
+                        <label for="thyroid" id="label-thyroid">Thyroid (थायराइड)</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="cancer" name="conditions" value="cancer">
+                        <label for="cancer" id="label-cancer">Cancer (कैंसर)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Allergies -->
+            <div class="section">
+                <h3 id="allergies-title">Allergies</h3>
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="pesticide-sensitive" name="allergies" value="pesticide_sensitive">
+                        <label for="pesticide-sensitive" id="label-pesticide">Pesticide Sensitive (कीटनाशक संवेदनशील)</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="food-allergy" name="allergies" value="food_allergy">
+                        <label for="food-allergy" id="label-food">Food Allergies (खाद्य एलर्जी)</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="chemical-sensitive" name="allergies" value="chemical_sensitive">
+                        <label for="chemical-sensitive" id="label-chemical">Chemical Sensitive (रासायनिक संवेदनशील)</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="skin-sensitive" name="allergies" value="skin_sensitive">
+                        <label for="skin-sensitive" id="label-skin">Skin Sensitive (त्वचा संवेदनशील)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Special Conditions -->
+            <div class="section">
+                <h3 id="special-title">Special Conditions</h3>
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="pregnant" name="special" value="pregnant">
+                        <label for="pregnant" id="label-pregnant">Pregnant (गर्भवती)</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="breastfeeding" name="special" value="breastfeeding">
+                        <label for="breastfeeding" id="label-breastfeeding">Breastfeeding (स्तनपान)</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="elderly" name="special" value="elderly">
+                        <label for="elderly" id="label-elderly">Elderly (बुजुर्ग)</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="child" name="special" value="child">
+                        <label for="child" id="label-child">Young Child (छोटा बच्चा)</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="immunocompromised" name="special" value="immunocompromised">
+                        <label for="immunocompromised" id="label-immune">Weak Immunity (कमजोर प्रतिरक्षा)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Age -->
+            <div class="form-group">
+                <label id="label-age" for="age">Age (Optional):</label>
+                <div class="input-with-mic">
+                    <input type="number" id="age" min="1" max="120" placeholder="Enter your age" onfocus="speakField('age')">
+                    <button type="button" class="mic-btn" onclick="startVoiceInput('age')">🎤</button>
+                </div>
+            </div>
+
+            <!-- Additional Notes -->
+            <div class="form-group">
+                <label id="label-notes" for="notes">Additional Health Notes (Optional):</label>
+                <div class="input-with-mic">
+                    <textarea id="notes" placeholder="Any other health information we should know..." onfocus="speakField('notes')"></textarea>
+                    <button type="button" class="mic-btn" onclick="startVoiceInput('notes')">🎤</button>
+                </div>
+            </div>
+
+            <button type="submit" class="save-btn" id="save-btn">Save & Continue / सहेजें और जारी रखें</button>
+            <button type="button" class="skip-btn" id="skip-btn" onclick="skipProfile()">Skip for Now / अभी छोड़ें</button>
+        </form>
+    </div>
+
+    <script>
+        let currentLang = 'en';
+        let recognition = null;
+        const synthesis = window.speechSynthesis;
+
+        // Initialize Speech Recognition
+        function initSpeechRecognition() {
+            if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                recognition = new SpeechRecognition();
+                recognition.continuous = false;
+                recognition.interimResults = false;
+            }
+        }
+
+        // Text-to-Speech
+        function speak(text, lang = null) {
+            const language = lang || currentLang;
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = language === 'hi' ? 'hi-IN' : 'en-US';
+            utterance.rate = 0.9;
+            utterance.pitch = 1;
+            synthesis.speak(utterance);
+        }
+
+        // Voice Input
+        function startVoiceInput(inputId) {
+            if (!recognition) {
+                alert(currentLang === 'hi' ? 'आपके ब्राउज़र में वॉयस इनपुट समर्थित नहीं है' : 'Voice input not supported in your browser');
+                return;
+            }
+
+            recognition.lang = currentLang === 'hi' ? 'hi-IN' : 'en-US';
+
+            recognition.onstart = () => {
+                speak(currentLang === 'hi' ? 'सुन रहा हूं...' : 'Listening...', currentLang);
+            };
+
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                document.getElementById(inputId).value = transcript;
+                speak(currentLang === 'hi' ? 'आवाज प्राप्त हुई: ' + transcript : 'Voice received: ' + transcript, currentLang);
+            };
+
+            recognition.onerror = (event) => {
+                console.error('Speech recognition error:', event.error);
+            };
+
+            recognition.start();
+        }
+
+        // Speak field guidance
+        function speakField(fieldName) {
+            const messages = {
+                en: {
+                    age: 'Please enter your age in years. This helps us provide better recommendations. You can speak it.',
+                    notes: 'You can add any additional health information that might be relevant. You can speak it using the microphone button.'
+                },
+                hi: {
+                    age: 'कृपया अपनी उम्र वर्षों में दर्ज करें। यह हमें बेहतर सिफारिशें प्रदान करने में मदद करता है। आप इसे बोल सकते हैं।',
+                    notes: 'आप कोई अतिरिक्त स्वास्थ्य जानकारी जोड़ सकते हैं जो प्रासंगिक हो सकती है। आप माइक्रोफोन बटन का उपयोग करके इसे बोल सकते हैं।'
+                }
+            };
+
+            if (messages[currentLang] && messages[currentLang][fieldName]) {
+                speak(messages[currentLang][fieldName], currentLang);
+            }
+        }
+
+        // Toggle Language
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'hi' : 'en';
+            updateLanguage();
+            speak(currentLang === 'hi' ? 'भाषा हिंदी में बदल दी गई' : 'Language changed to English', currentLang);
+        }
+
+        // Update UI Language
+        function updateLanguage() {
+            const langBtn = document.getElementById('lang-btn');
+            const labels = {
+                en: {
+                    title: '🏥 Health Profile',
+                    subtitle: 'Help us recommend safer produce for you',
+                    info: 'This information helps us analyze which produce is safest for your health conditions. All data is confidential and used only for personalized recommendations.',
+                    conditions: 'Health Conditions',
+                    allergies: 'Allergies',
+                    special: 'Special Conditions',
+                    age: 'Age (Optional):',
+                    notes: 'Additional Health Notes (Optional):',
+                    save: 'Save & Continue',
+                    skip: 'Skip for Now'
+                },
+                hi: {
+                    title: '🏥 स्वास्थ्य प्रोफ़ाइल',
+                    subtitle: 'हमें आपके लिए सुरक्षित उपज की सिफारिश करने में मदद करें',
+                    info: 'यह जानकारी हमें यह विश्लेषण करने में मदद करती है कि कौन सी उपज आपकी स्वास्थ्य स्थितियों के लिए सबसे सुरक्षित है। सभी डेटा गोपनीय है और केवल व्यक्तिगत सिफारिशों के लिए उपयोग किया जाता है।',
+                    conditions: 'स्वास्थ्य स्थितियां',
+                    allergies: 'एलर्जी',
+                    special: 'विशेष स्थितियां',
+                    age: 'उम्र (वैकल्पिक):',
+                    notes: 'अतिरिक्त स्वास्थ्य नोट्स (वैकल्पिक):',
+                    save: 'सहेजें और जारी रखें',
+                    skip: 'अभी छोड़ें'
+                }
+            };
+
+            langBtn.textContent = currentLang === 'en' ? '🇬🇧 English' : '🇮🇳 हिंदी';
+            document.body.className = currentLang === 'hi' ? 'hindi' : '';
+
+            document.getElementById('app-title').textContent = labels[currentLang].title;
+            document.getElementById('app-subtitle').textContent = labels[currentLang].subtitle;
+            document.getElementById('info-text').textContent = labels[currentLang].info;
+            document.getElementById('conditions-title').textContent = labels[currentLang].conditions;
+            document.getElementById('allergies-title').textContent = labels[currentLang].allergies;
+            document.getElementById('special-title').textContent = labels[currentLang].special;
+            document.getElementById('label-age').textContent = labels[currentLang].age;
+            document.getElementById('label-notes').textContent = labels[currentLang].notes;
+            document.getElementById('save-btn').textContent = labels[currentLang].save;
+            document.getElementById('skip-btn').textContent = labels[currentLang].skip;
+        }
+
+        // Speak Welcome Message
+        function speakWelcome() {
+            const msg = currentLang === 'hi'
+                ? 'स्वास्थ्य प्रोफ़ाइल में आपका स्वागत है। कृपया अपनी स्वास्थ्य स्थितियों, एलर्जी और विशेष परिस्थितियों का चयन करें। यह जानकारी हमें आपके लिए सुरक्षित उपज की सिफारिश करने में मदद करेगी। सभी जानकारी गोपनीय है।'
+                : 'Welcome to Health Profile. Please select your health conditions, allergies and special circumstances. This information will help us recommend safer produce for you. All information is confidential.';
+            speak(msg, currentLang);
+        }
+
+        // Handle Save Profile
+        function handleSaveProfile(event) {
+            event.preventDefault();
+
+            // Get selected conditions
+            const conditions = Array.from(document.querySelectorAll('input[name="conditions"]:checked')).map(cb => cb.value);
+            const allergies = Array.from(document.querySelectorAll('input[name="allergies"]:checked')).map(cb => cb.value);
+            const special = Array.from(document.querySelectorAll('input[name="special"]:checked')).map(cb => cb.value);
+            const age = document.getElementById('age').value;
+            const notes = document.getElementById('notes').value;
+
+            // Get consumer from temp storage
+            const newConsumer = JSON.parse(localStorage.getItem('temp_new_consumer') || '{}');
+
+            // Create health profile
+            const healthProfile = {
+                conditions,
+                allergies,
+                special,
+                age: age || null,
+                notes: notes || '',
+                createdAt: new Date().toISOString()
+            };
+
+            // Add to consumer object
+            newConsumer.healthProfile = healthProfile;
+
+            // Update in users array
+            const users = JSON.parse(localStorage.getItem('farmtrace_users') || '[]');
+            const userIndex = users.findIndex(u => u.userid === newConsumer.userid);
+            if (userIndex !== -1) {
+                users[userIndex] = newConsumer;
+                localStorage.setItem('farmtrace_users', JSON.stringify(users));
+            }
+
+            // Clear temp storage
+            localStorage.removeItem('temp_new_consumer');
+
+            // Show success
+            const successDiv = document.getElementById('success-message');
+            successDiv.textContent = currentLang === 'hi' ? 'स्वास्थ्य प्रोफ़ाइल सफलतापूर्वक सहेजी गई!' : 'Health profile saved successfully!';
+            successDiv.style.display = 'block';
+
+            const msg = currentLang === 'hi'
+                ? 'स्वास्थ्य प्रोफ़ाइल सफलतापूर्वक सहेजी गई। अब आप लॉगिन कर सकते हैं।'
+                : 'Health profile saved successfully. You can now login.';
+
+            speak(msg, currentLang);
+
+            // Redirect to login
+            setTimeout(() => {
+                window.location.href = 'login.html';
+            }, 2000);
+        }
+
+        // Skip Profile
+        function skipProfile() {
+            const msg = currentLang === 'hi'
+                ? 'आप बाद में अपनी प्रोफ़ाइल में स्वास्थ्य जानकारी जोड़ सकते हैं। अब आप लॉगिन कर सकते हैं।'
+                : 'You can add health information in your profile later. You can now login.';
+
+            speak(msg, currentLang);
+
+            // Clear temp storage
+            localStorage.removeItem('temp_new_consumer');
+
+            // Redirect to login
+            setTimeout(() => {
+                window.location.href = 'login.html';
+            }, 1500);
+        }
+
+        // Initialize on page load
+        window.addEventListener('load', () => {
+            initSpeechRecognition();
+
+            // Check if user came from signup
+            const newConsumer = localStorage.getItem('temp_new_consumer');
+            if (!newConsumer) {
+                // Redirect to signup if no temp data
+                window.location.href = 'signup.html';
+                return;
+            }
+
+            speakWelcome();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FarmTrace - Sign Up | खाता बनाएं</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, 'Noto Sans Devanagari';
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        body.hindi {
+            font-family: 'Noto Sans Devanagari', 'Segoe UI', sans-serif;
+        }
+
+        .signup-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 550px;
+            width: 100%;
+            padding: 3rem;
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo h1 {
+            color: #667eea;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .logo p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .language-toggle {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .lang-btn, .voice-btn {
+            padding: 0.5rem 1rem;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .lang-btn:hover, .voice-btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #2c3e50;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .input-with-mic {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .input-with-mic input, .input-with-mic select {
+            flex: 1;
+            padding: 0.9rem 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-with-mic input:focus, .input-with-mic select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .input-with-mic input:read-only {
+            background: #f0f0f0;
+            cursor: not-allowed;
+        }
+
+        .mic-btn {
+            padding: 0.9rem;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);
+        }
+
+        .mic-btn:hover {
+            background: #2980b9;
+            transform: scale(1.1);
+        }
+
+        .mic-btn:active {
+            background: #e74c3c;
+            transform: scale(0.95);
+        }
+
+        .signup-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.4);
+            margin-top: 1rem;
+        }
+
+        .signup-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(39, 174, 96, 0.5);
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .login-link p {
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.05rem;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        .auto-id-display {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .auto-id-display strong {
+            color: #667eea;
+            font-size: 1.2rem;
+        }
+
+        .error-message {
+            background: #fee;
+            color: #c33;
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .success-message {
+            background: #efe;
+            color: #3c3;
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="signup-container">
+        <div class="language-toggle">
+            <button onclick="toggleLanguage()" class="lang-btn" id="lang-btn">🇬🇧 English</button>
+            <button onclick="speakWelcome()" class="voice-btn" title="Voice Guide">🔊</button>
+        </div>
+
+        <div class="logo">
+            <h1 id="app-title">🌾 FarmTrace</h1>
+            <p id="app-subtitle">Create Your Account</p>
+        </div>
+
+        <div class="auto-id-display" id="auto-id-display" style="display: none;">
+            <p id="id-label">Your Auto-Generated ID:</p>
+            <strong id="generated-id"></strong>
+        </div>
+
+        <div class="error-message" id="error-message"></div>
+        <div class="success-message" id="success-message"></div>
+
+        <form id="signup-form" onsubmit="handleSignup(event)">
+            <div class="form-group">
+                <label id="label-role" for="role">Select Your Role:</label>
+                <div class="input-with-mic">
+                    <select id="role" onchange="generateUserID()" onfocus="speakField('role')" required>
+                        <option value="">-- Select Role --</option>
+                        <option value="farmer">👨‍🌾 Farmer (किसान)</option>
+                        <option value="transporter">🚚 Transporter (परिवहनकर्ता)</option>
+                        <option value="middleman">👔 Middleman (बिचौलिया)</option>
+                        <option value="government">🏛️ Government Agent (सरकारी एजेंट)</option>
+                        <option value="wholesaler">📦 Wholesaler/Retailer (थोक विक्रेता)</option>
+                        <option value="certification">✅ Certification Body (प्रमाणन निकाय)</option>
+                        <option value="consumer">👤 Consumer (उपभोक्ता)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label id="label-userid" for="userid">Auto-Generated User ID:</label>
+                <div class="input-with-mic">
+                    <input type="text" id="userid" readonly placeholder="Select role first">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label id="label-name" for="name">Full Name:</label>
+                <div class="input-with-mic">
+                    <input type="text" id="name" placeholder="Enter your full name" onfocus="speakField('name')" required>
+                    <button type="button" class="mic-btn" onclick="startVoiceInput('name')">🎤</button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label id="label-phone" for="phone">Phone Number:</label>
+                <div class="input-with-mic">
+                    <input type="tel" id="phone" placeholder="+91-XXXXXXXXXX" onfocus="speakField('phone')" required>
+                    <button type="button" class="mic-btn" onclick="startVoiceInput('phone')">🎤</button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label id="label-location" for="location">Location (City, State):</label>
+                <div class="input-with-mic">
+                    <input type="text" id="location" placeholder="e.g., Nashik, MH" onfocus="speakField('location')" required>
+                    <button type="button" class="mic-btn" onclick="startVoiceInput('location')">🎤</button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label id="label-password" for="password">Password:</label>
+                <div class="input-with-mic">
+                    <input type="password" id="password" placeholder="Create a password" onfocus="speakField('password')" required>
+                    <button type="button" class="mic-btn" onclick="startVoiceInput('password')">🎤</button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label id="label-confirm" for="confirm-password">Confirm Password:</label>
+                <div class="input-with-mic">
+                    <input type="password" id="confirm-password" placeholder="Re-enter password" onfocus="speakField('confirm')" required>
+                    <button type="button" class="mic-btn" onclick="startVoiceInput('confirm-password')">🎤</button>
+                </div>
+            </div>
+
+            <button type="submit" class="signup-btn" id="signup-btn">Create Account / खाता बनाएं</button>
+        </form>
+
+        <div class="login-link">
+            <p id="login-text">Already have an account?</p>
+            <a href="login.html" id="login-link">Login / लॉगिन करें</a>
+        </div>
+    </div>
+
+    <script>
+        let currentLang = 'en';
+        let recognition = null;
+        const synthesis = window.speechSynthesis;
+        let userIDCounter = parseInt(localStorage.getItem('farmtrace_id_counter') || '1000');
+
+        // Initialize Speech Recognition
+        function initSpeechRecognition() {
+            if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                recognition = new SpeechRecognition();
+                recognition.continuous = false;
+                recognition.interimResults = false;
+            }
+        }
+
+        // Text-to-Speech
+        function speak(text, lang = null) {
+            const language = lang || currentLang;
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = language === 'hi' ? 'hi-IN' : 'en-US';
+            utterance.rate = 0.9;
+            utterance.pitch = 1;
+            synthesis.speak(utterance);
+        }
+
+        // Voice Input
+        function startVoiceInput(inputId) {
+            if (!recognition) {
+                alert(currentLang === 'hi' ? 'आपके ब्राउज़र में वॉयस इनपुट समर्थित नहीं है' : 'Voice input not supported in your browser');
+                return;
+            }
+
+            recognition.lang = currentLang === 'hi' ? 'hi-IN' : 'en-US';
+
+            recognition.onstart = () => {
+                speak(currentLang === 'hi' ? 'सुन रहा हूं...' : 'Listening...', currentLang);
+            };
+
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                document.getElementById(inputId).value = transcript;
+                speak(currentLang === 'hi' ? 'आवाज प्राप्त हुई: ' + transcript : 'Voice received: ' + transcript, currentLang);
+            };
+
+            recognition.onerror = (event) => {
+                console.error('Speech recognition error:', event.error);
+            };
+
+            recognition.start();
+        }
+
+        // Generate User ID
+        function generateUserID() {
+            const role = document.getElementById('role').value;
+            if (!role) return;
+
+            const prefixes = {
+                farmer: 'FRM',
+                transporter: 'TRP',
+                middleman: 'MID',
+                government: 'GOV',
+                wholesaler: 'WHL',
+                certification: 'CERT',
+                consumer: 'CONS'
+            };
+
+            userIDCounter++;
+            localStorage.setItem('farmtrace_id_counter', userIDCounter.toString());
+
+            const userID = `${prefixes[role]}-${userIDCounter.toString().padStart(4, '0')}`;
+            document.getElementById('userid').value = userID;
+
+            // Show auto-generated ID
+            document.getElementById('generated-id').textContent = userID;
+            document.getElementById('auto-id-display').style.display = 'block';
+
+            const msg = currentLang === 'hi'
+                ? `आपकी स्वचालित आईडी बनाई गई: ${userID}. कृपया इसे याद रखें।`
+                : `Your auto-generated ID is: ${userID}. Please remember it.`;
+
+            speak(msg, currentLang);
+        }
+
+        // Speak field guidance
+        function speakField(fieldName) {
+            const messages = {
+                en: {
+                    role: 'Please select your role in the supply chain. After selecting, a unique User ID will be automatically generated for you.',
+                    name: 'Please enter your full name. You can speak it using the microphone button.',
+                    phone: 'Please enter your phone number with country code. For example: plus 91 dash 98 76 54 32 10. You can speak it.',
+                    location: 'Please enter your city and state. For example: Nashik comma Maharashtra. You can speak it.',
+                    password: 'Please create a strong password. You can speak it using the microphone button.',
+                    confirm: 'Please re-enter your password to confirm. You can speak it.'
+                },
+                hi: {
+                    role: 'कृपया आपूर्ति श्रृंखला में अपनी भूमिका चुनें। चयन के बाद, आपके लिए एक अद्वितीय उपयोगकर्ता आईडी स्वचालित रूप से उत्पन्न होगी।',
+                    name: 'कृपया अपना पूरा नाम दर्ज करें। आप माइक्रोफोन बटन का उपयोग करके इसे बोल सकते हैं।',
+                    phone: 'कृपया देश कोड के साथ अपना फोन नंबर दर्ज करें। उदाहरण के लिए: प्लस 91 डैश 98 76 54 32 10। आप इसे बोल सकते हैं।',
+                    location: 'कृपया अपना शहर और राज्य दर्ज करें। उदाहरण के लिए: नासिक कॉमा महाराष्ट्र। आप इसे बोल सकते हैं।',
+                    password: 'कृपया एक मजबूत पासवर्ड बनाएं। आप माइक्रोफोन बटन का उपयोग करके इसे बोल सकते हैं।',
+                    confirm: 'कृपया पुष्टि करने के लिए अपना पासवर्ड फिर से दर्ज करें। आप इसे बोल सकते हैं।'
+                }
+            };
+
+            if (messages[currentLang] && messages[currentLang][fieldName]) {
+                speak(messages[currentLang][fieldName], currentLang);
+            }
+        }
+
+        // Toggle Language
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'hi' : 'en';
+            updateLanguage();
+            speak(currentLang === 'hi' ? 'भाषा हिंदी में बदल दी गई' : 'Language changed to English', currentLang);
+        }
+
+        // Update UI Language
+        function updateLanguage() {
+            const langBtn = document.getElementById('lang-btn');
+            const labels = {
+                en: {
+                    title: '🌾 FarmTrace',
+                    subtitle: 'Create Your Account',
+                    role: 'Select Your Role:',
+                    userid: 'Auto-Generated User ID:',
+                    name: 'Full Name:',
+                    phone: 'Phone Number:',
+                    location: 'Location (City, State):',
+                    password: 'Password:',
+                    confirm: 'Confirm Password:',
+                    signup: 'Create Account',
+                    login_text: 'Already have an account?',
+                    login_link: 'Login',
+                    id_label: 'Your Auto-Generated ID:'
+                },
+                hi: {
+                    title: '🌾 फार्मट्रेस',
+                    subtitle: 'अपना खाता बनाएं',
+                    role: 'अपनी भूमिका चुनें:',
+                    userid: 'स्वचालित उत्पन्न उपयोगकर्ता आईडी:',
+                    name: 'पूरा नाम:',
+                    phone: 'फोन नंबर:',
+                    location: 'स्थान (शहर, राज्य):',
+                    password: 'पासवर्ड:',
+                    confirm: 'पासवर्ड की पुष्टि करें:',
+                    signup: 'खाता बनाएं',
+                    login_text: 'पहले से खाता है?',
+                    login_link: 'लॉगिन करें',
+                    id_label: 'आपकी स्वचालित उत्पन्न आईडी:'
+                }
+            };
+
+            langBtn.textContent = currentLang === 'en' ? '🇬🇧 English' : '🇮🇳 हिंदी';
+            document.body.className = currentLang === 'hi' ? 'hindi' : '';
+
+            document.getElementById('app-title').textContent = labels[currentLang].title;
+            document.getElementById('app-subtitle').textContent = labels[currentLang].subtitle;
+            document.getElementById('label-role').textContent = labels[currentLang].role;
+            document.getElementById('label-userid').textContent = labels[currentLang].userid;
+            document.getElementById('label-name').textContent = labels[currentLang].name;
+            document.getElementById('label-phone').textContent = labels[currentLang].phone;
+            document.getElementById('label-location').textContent = labels[currentLang].location;
+            document.getElementById('label-password').textContent = labels[currentLang].password;
+            document.getElementById('label-confirm').textContent = labels[currentLang].confirm;
+            document.getElementById('signup-btn').textContent = labels[currentLang].signup;
+            document.getElementById('login-text').textContent = labels[currentLang].login_text;
+            document.getElementById('login-link').textContent = labels[currentLang].login_link;
+            document.getElementById('id-label').textContent = labels[currentLang].id_label;
+        }
+
+        // Speak Welcome Message
+        function speakWelcome() {
+            const msg = currentLang === 'hi'
+                ? 'फार्मट्रेस में आपका स्वागत है। कृपया अपना खाता बनाने के लिए फॉर्म भरें। पहले अपनी भूमिका चुनें, फिर एक अद्वितीय आईडी स्वचालित रूप से उत्पन्न होगी। आप किसी भी फ़ील्ड को भरने के लिए माइक्रोफोन बटन का उपयोग करके बोल सकते हैं।'
+                : 'Welcome to FarmTrace. Please fill the form to create your account. First select your role, then a unique ID will be automatically generated. You can use the microphone button to speak any field.';
+            speak(msg, currentLang);
+        }
+
+        // Handle Signup
+        function handleSignup(event) {
+            event.preventDefault();
+
+            const role = document.getElementById('role').value;
+            const userid = document.getElementById('userid').value;
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+            const location = document.getElementById('location').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+
+            // Validate passwords match
+            if (password !== confirmPassword) {
+                showError(currentLang === 'hi' ? 'पासवर्ड मेल नहीं खाते' : 'Passwords do not match');
+                return;
+            }
+
+            // Create user object
+            const newUser = {
+                role,
+                userid,
+                name,
+                phone,
+                location,
+                password, // In production, this should be hashed
+                createdAt: new Date().toISOString()
+            };
+
+            // Get existing users or initialize array
+            const users = JSON.parse(localStorage.getItem('farmtrace_users') || '[]');
+
+            // Check if user already exists
+            const exists = users.find(u => u.phone === phone || u.userid === userid);
+            if (exists) {
+                showError(currentLang === 'hi' ? 'यह फोन नंबर या उपयोगकर्ता आईडी पहले से मौजूद है' : 'This phone number or user ID already exists');
+                return;
+            }
+
+            // Add new user
+            users.push(newUser);
+            localStorage.setItem('farmtrace_users', JSON.stringify(users));
+
+            showSuccess(currentLang === 'hi' ? `खाता सफलतापूर्वक बनाया गया! आपकी आईडी: ${userid}` : `Account created successfully! Your ID: ${userid}`);
+
+            const msg = currentLang === 'hi'
+                ? `खाता सफलतापूर्वक बनाया गया। आपकी उपयोगकर्ता आईडी ${userid} है। कृपया इसे याद रखें। अब आप लॉगिन कर सकते हैं।`
+                : `Account created successfully. Your User ID is ${userid}. Please remember it. You can now login.`;
+
+            speak(msg, currentLang);
+
+            // Redirect to health profile if consumer
+            setTimeout(() => {
+                if (role === 'consumer') {
+                    localStorage.setItem('temp_new_consumer', JSON.stringify(newUser));
+                    window.location.href = 'health_profile.html';
+                } else {
+                    window.location.href = 'login.html';
+                }
+            }, 3000);
+        }
+
+        // Show Error Message
+        function showError(message) {
+            const errorDiv = document.getElementById('error-message');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            speak(message, currentLang);
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+            }, 3000);
+        }
+
+        // Show Success Message
+        function showSuccess(message) {
+            const successDiv = document.getElementById('success-message');
+            successDiv.textContent = message;
+            successDiv.style.display = 'block';
+            setTimeout(() => {
+                successDiv.style.display = 'none';
+            }, 3000);
+        }
+
+        // Initialize on page load
+        window.addEventListener('load', () => {
+            initSpeechRecognition();
+            speakWelcome();
+        });
+    </script>
+</body>
+</html>
